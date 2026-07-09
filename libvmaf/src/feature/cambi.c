@@ -35,61 +35,13 @@
 #include "x86/cambi_avx2.h"
 #endif
 
-/* Ratio of pixels for computation, must be 0 < topk <= 1.0 */
-#define DEFAULT_CAMBI_TOPK_POOLING (0.6)
+#include "cambi.h"
 
-/* Window size to compute CAMBI: 65 corresponds to approximately 1 degree at 4k scale */
-#define DEFAULT_CAMBI_WINDOW_SIZE (65)
-
-/* Visibility threshold for luminance ΔL < tvi_threshold*L_mean for BT.1886 */
-#define DEFAULT_CAMBI_TVI (0.019)
-
-/* Luminance value below which we assume any banding is not visible */
-#define DEFAULT_CAMBI_VLT (0.0)
-
-/* Max log contrast luma levels */
-#define DEFAULT_CAMBI_MAX_LOG_CONTRAST (2)
-
-/* If true, CAMBI will be run in full-reference mode and will use both the reference and distorted inputs */
-#define DEFAULT_CAMBI_FULL_REF_FLAG (false)
-
-/* EOTF to use for the visibility threshold calculations. One of ['bt1886', 'pq']. Default: 'bt1886'. */
-#define DEFAULT_CAMBI_EOTF ("bt1886")
-
-/* CAMBI speed-up for resolutions >=1080p by down-scaling right after the sptial mask */
-#define DEFAULT_CAMBI_HIGH_RES_SPEEDUP (0)
-#define CAMBI_HIGH_RES_SPEEDUP_THRESHOLD_1080p (1920 * 1080)
-#define CAMBI_HIGH_RES_SPEEDUP_THRESHOLD_1440p (2560 * 1440)
-#define CAMBI_HIGH_RES_SPEEDUP_THRESHOLD_2160p (3840 * 2160)
-
-#define CAMBI_MIN_WIDTH_HEIGHT (216)
-#define CAMBI_4K_WIDTH (3840)
-#define CAMBI_4K_HEIGHT (2160)
-
-/* Default maximum value allowed for CAMBI */
-#define DEFAULT_CAMBI_MAX_VAL (1000.0)
-
-#define NUM_SCALES 5
 static const int g_scale_weights[NUM_SCALES] = {16, 8, 4, 2, 1};
 
 /* Suprathreshold contrast response */
 static const int g_contrast_weights[32] = {1, 2, 3, 4, 4, 5, 5, 6, 6, 6, 6, 7, 7, 7, 7, 8,
                                            8, 8, 8, 8, 8, 8, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9};
-
-#define MAX(x, y) (((x) > (y)) ? (x) : (y))
-#define MIN(x, y) (((x) < (y)) ? (x) : (y))
-#define CLAMP(x, low, high) (((x) > (high)) ? (high) : (((x) < (low)) ? (low) : (x)))
-#define SWAP_FLOATS(x, y) \
-    {                     \
-        float temp = x;   \
-        x = y;            \
-        y = temp;         \
-    }
-
-#define PICS_BUFFER_SIZE 2
-#define MASK_FILTER_SIZE 7
-
-#include "cambi.h"
 
 typedef struct CambiBuffers {
     float *c_values;
@@ -280,8 +232,8 @@ static const VmafOption options[] = {
         .offset = offsetof(CambiState, max_log_contrast),
         .type = VMAF_OPT_TYPE_INT,
         .default_val.i = DEFAULT_CAMBI_MAX_LOG_CONTRAST,
-        .min = 0,
-        .max = 5,
+        .min = MIN_CAMBI_MAX_LOG_CONTRAST,
+        .max = MAX_CAMBI_MAX_LOG_CONTRAST,
         .flags = VMAF_OPT_FLAG_FEATURE_PARAM,
         .alias = "mlc",
     },
