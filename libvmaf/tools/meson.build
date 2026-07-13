@@ -8,7 +8,7 @@ if not get_option('enable_tools')
 endif
 
 vmaf = executable(
-    'vmaf',
+    'vmaf_cli',
     ['vmaf.c', 'cli_parse.c', 'y4m_input.c', 'vidinput.c', 'yuv_input.c'],
     include_directories : [libvmaf_inc, vmaf_include],
     dependencies: [stdatomic_dependency, cuda_dependency],
