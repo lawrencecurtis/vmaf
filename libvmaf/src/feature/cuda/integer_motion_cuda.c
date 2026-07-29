@@ -94,7 +94,7 @@ static int extract_force_zero(VmafFeatureExtractor *fex,
 
     int err =
         vmaf_feature_collector_append_with_dict(feature_collector,
-                s->feature_name_dict, "VMAF_integer_feature_motion2_score", 0.,
+                s->feature_name_dict, "VMAF_integer_feature_motion3_score", 0.,
                 index);
 
     if (!s->debug) return err;
@@ -214,7 +214,7 @@ static int flush_fex_cuda(VmafFeatureExtractor *fex,
 
     if (s->index > 0) {
         ret = vmaf_feature_collector_append(feature_collector,
-                "VMAF_integer_feature_motion2_score",
+                "VMAF_integer_feature_motion3_score",
                 s->score, s->index);
     }
 
@@ -248,7 +248,7 @@ static int write_scores(write_score_parameters_moco* params)
         return 0;
 
     err = vmaf_feature_collector_append(feature_collector,
-            "VMAF_integer_feature_motion2_score",
+            "VMAF_integer_feature_motion3_score",
             score_prev < s->score ? score_prev : s->score, params->index - 1);
     return err;
 }
@@ -292,7 +292,7 @@ static int extract_fex_cuda(VmafFeatureExtractor *fex, VmafPicture *ref_pic,
 
     if (index == 0) {
         err = vmaf_feature_collector_append(feature_collector,
-                "VMAF_integer_feature_motion2_score",
+                "VMAF_integer_feature_motion3_score",
                 0., index);
         if (s->debug) {
             err |= vmaf_feature_collector_append(feature_collector,
@@ -349,7 +349,7 @@ static int close_fex_cuda(VmafFeatureExtractor *fex)
 }
 
 static const char *provided_features[] = {
-    "VMAF_integer_feature_motion_score", "VMAF_integer_feature_motion2_score",
+    "VMAF_integer_feature_motion_score", "VMAF_integer_feature_motion3_score",
     NULL
 };
 
