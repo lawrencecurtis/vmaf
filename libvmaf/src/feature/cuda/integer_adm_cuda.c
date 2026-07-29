@@ -687,7 +687,7 @@ static void write_scores(write_score_parameters_adm* params)
 
     int err = 0;
     err |= vmaf_feature_collector_append_with_dict(feature_collector,
-            s->feature_name_dict, "VMAF_integer_feature_adm2_score", score,
+            s->feature_name_dict, "VMAF_integer_feature_adm3_score", score,
             index);
 
     err |= vmaf_feature_collector_append_with_dict(feature_collector,
