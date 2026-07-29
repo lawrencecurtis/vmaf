@@ -1228,7 +1228,7 @@ static int flush_fex_cuda(VmafFeatureExtractor *fex,
 }
 
 static const char *provided_features[] = {
-    "VMAF_integer_feature_adm2_score", "integer_adm_scale0",
+    "VMAF_integer_feature_adm3_score", "integer_adm_scale0",
     "integer_adm_scale1", "integer_adm_scale2", "integer_adm_scale3",
     "integer_adm", "integer_adm_num", "integer_adm_den",
     "integer_adm_num_scale0", "integer_adm_den_scale0", "integer_adm_num_scale1",
