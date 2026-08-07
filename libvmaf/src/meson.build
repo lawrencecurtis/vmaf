@@ -35,7 +35,7 @@ is_cuda_enabled = get_option('enable_cuda') == true
 is_avx512_enabled = get_option('enable_avx512') == true
 is_nvtx_enabled = get_option('enable_nvtx') == true
 
-if is_nvtx_enabled    
+if is_nvtx_enabled
     cdata.set10('HAVE_NVTX', is_nvtx_enabled)
 endif
 if is_cuda_enabled
@@ -355,6 +355,7 @@ if is_cuda_enabled
         'filter1d' : [feature_src_dir + 'cuda/integer_vif/filter1d.cu'],
         'motion_score' : [feature_src_dir + 'cuda/integer_motion/motion_score.cu'],
         'speed_filter' : [feature_src_dir + 'cuda/speed/speed_filter.cu'],
+        'cambi_derivative' : [feature_src_dir + 'cuda/cambi/cambi_derivative.cu'],
     }
     message(cuda_cu_sources)
     cuda_sources = [
