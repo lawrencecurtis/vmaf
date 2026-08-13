@@ -246,4 +246,21 @@ if is_cuda_enabled
         link_args : ['-ldl'],
     )
     test('cambi_cuda', test_cambi_cuda)
+if is_asm_enabled and (host_machine.cpu_family().startswith('arm64') or host_machine.cpu_family().startswith('aarch64'))
+    test_motion_neon = executable('test_motion_neon',
+        ['test.c', 'test_motion_neon.c', '../src/mem.c', '../src/picture.c', '../src/ref.c',
+         '../src/dict.c', '../src/opt.c', '../src/log.c', '../src/predict.c',
+         '../src/metadata_handler.c'],
+        include_directories : [libvmaf_inc, test_inc, include_directories('../src/')],
+        dependencies : [math_lib, stdatomic_dependency, thread_lib, cuda_dependency],
+        objects : [
+          common_cuda_objects,
+          platform_specific_cpu_objects,
+          libvmaf_feature_static_lib.extract_all_objects(recursive: true),
+          libvmaf_cpu_static_lib.extract_all_objects(recursive: true),
+          libsvm_static_lib.extract_all_objects(recursive: true),
+        ]
+    )
+
+    test('test_motion_neon', test_motion_neon)
 endif
