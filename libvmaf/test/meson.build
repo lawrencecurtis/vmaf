@@ -257,5 +257,17 @@ if is_cuda_enabled
         dependencies : [cuda_dependency],
         link_args : ['-ldl'],
     )
+
+    test_speed_cuda = executable('test_speed_cuda',
+        ['test.c', 'test_speed_cuda.c'] + ptx_arrays,
+        include_directories : [libvmaf_inc, test_inc,
+                               include_directories('../src'),
+                               include_directories('../src/feature'),
+                               include_directories('../src/cuda'),
+                               ],
+        dependencies : [cuda_dependency],
+        link_args : ['-ldl'],
+    )
     test('cambi_cuda', test_cambi_cuda)
+    test('speed_cuda', test_speed_cuda)
 endif

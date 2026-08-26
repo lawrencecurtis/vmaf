@@ -35,7 +35,7 @@ is_cuda_enabled = get_option('enable_cuda') == true
 is_avx512_enabled = get_option('enable_avx512') == true
 is_nvtx_enabled = get_option('enable_nvtx') == true
 
-if is_nvtx_enabled    
+if is_nvtx_enabled
     cdata.set10('HAVE_NVTX', is_nvtx_enabled)
 endif
 if is_cuda_enabled
@@ -360,6 +360,7 @@ if is_cuda_enabled
         'cambi_spatial_mask' : [feature_src_dir + 'cuda/cambi/cambi_spatial_mask.cu'],
         'cambi_c_values' : [feature_src_dir + 'cuda/cambi/cambi_c_values.cu'],
         'cambi_preprocess' : [feature_src_dir + 'cuda/cambi/cambi_preprocess.cu'],
+        'speed_filter' : [feature_src_dir + 'cuda/speed/speed_filter.cu'],
     }
     message(cuda_cu_sources)
     cuda_sources = [
@@ -549,6 +550,7 @@ if is_cuda_enabled
         feature_src_dir + 'cuda/integer_motion_cuda.c',
 
         feature_src_dir + 'cuda/cambi_cuda.c',
+        feature_src_dir + 'cuda/speed_cuda.c',
     ]
 endif
 
