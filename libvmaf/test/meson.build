@@ -230,22 +230,29 @@ test('test_motion_blend', test_motion_blend)
 if is_cuda_enabled
     test_speed_cuda = executable('test_speed_cuda',
         ['test.c', 'test_speed_cuda.c'] + ptx_arrays,
+        include_directories : [libvmaf_inc, test_inc,
+                               include_directories('../src'),
+                               include_directories('../src/feature'),
+                               include_directories('../src/cuda'),
+                               include_directories('/usr/local/cuda/include')],
+        dependencies : [cuda_dependency],
+        link_args : ['-ldl'],
+    )
+    test('speed_cuda', test_speed_cuda)
+
     test_cambi_cuda = executable('test_cambi_cuda',
         ['test.c', 'test_cambi_cuda.c'] + ptx_arrays,
         include_directories : [libvmaf_inc, test_inc,
                                include_directories('../src'),
                                include_directories('../src/feature'),
                                include_directories('../src/cuda'),
-                               ],
-        dependencies : [cuda_dependency],
-        link_args : ['-ldl'],
-    )
-    test('speed_cuda', test_speed_cuda)
                                include_directories('/usr/local/cuda/include')],
         dependencies : [cuda_dependency],
         link_args : ['-ldl'],
     )
     test('cambi_cuda', test_cambi_cuda)
+endif
+
 if is_asm_enabled and (host_machine.cpu_family().startswith('arm64') or host_machine.cpu_family().startswith('aarch64'))
     test_motion_neon = executable('test_motion_neon',
         ['test.c', 'test_motion_neon.c', '../src/mem.c', '../src/picture.c', '../src/ref.c',
